@@ -932,8 +932,15 @@ class EmailTest extends \PHPUnit\Framework\TestCase
         $this->assertStringContainsString('The email message has non-ascii chars Ragnarr Lo=C3=BEbr=C3=B3k', $result);
     }
 
+    /**
+     * Work with ENV vars
+     *
+     * @param string $key
+     * @return void
+     */
     protected function env(string $key)
     {
-        return $_ENV[$key] ?? null;
+        $result = getenv($key);
+        return $result ? $result : null;
     }
 }
