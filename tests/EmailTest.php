@@ -558,18 +558,6 @@ class EmailTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Use this whilst creating or debugging tests to see output
-     *
-     * @param [type] $result
-     * @return void
-     */
-    protected function debugResult($result)
-    {
-        pr($result);
-        pr(str_replace("\r\n", '\r\n', $result));
-    }
-
-    /**
      * To help with testing
      *
      * @param array $result
