@@ -601,7 +601,7 @@ class EmailTest extends \PHPUnit\Framework\TestCase
         $email->to('james@originphp.com')
             ->from('mailer@originphp.com')
             ->subject('html test')
-            ->format('text');
+            ->format('html');
         $email->send();
     }
 
@@ -732,7 +732,6 @@ class EmailTest extends \PHPUnit\Framework\TestCase
 
         $result = $email->send();
         $this->assertNotEmpty($result);
-        
         sleep(1); // small delay before next email is sent
         return implode("'\n", $email->smtpLog());
     }
@@ -778,6 +777,8 @@ class EmailTest extends \PHPUnit\Framework\TestCase
 
         $this->assertNotEmpty($email->send());
     }
+
+    
 
     /**
     *  SMTP Error: 535-5.7.8 Username and Password not accepted.
