@@ -1,7 +1,7 @@
 # Email
 
 ![license](https://img.shields.io/badge/license-MIT-brightGreen.svg)
-[![build](https://travis-ci.org/originphp/email.svg?branch=masterhttps://travis-ci.org/originphp/email.svg?branch=master)](https://travis-ci.org/originphp/email)
+[![build](https://travis-ci.org/originphp/email.svg?branch=master)](https://travis-ci.org/originphp/email)
 [![coverage](https://coveralls.io/repos/github/originphp/email/badge.svg?branch=master)](https://coveralls.io/github/originphp/email?branch=master)
 
 The `Email` class enables you to send emails easily through SMTP.
