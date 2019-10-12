@@ -19,7 +19,8 @@
     <php>
        <const name="PHPUNIT" value="true"/>
        <env name="ORIGIN_ENV" value="test"/>
-       <env name="GMAIL_USERNAME" value="somebody@gmail.com"/>
-       <env name="GMAIL_PASSWORD" value="secret"/>
+    
+       <!--env name="GMAIL_USERNAME" value="somebody@gmail.com"/>
+       <env name="GMAIL_PASSWORD" value="secret"/-->
     </php>
 </phpunit>
