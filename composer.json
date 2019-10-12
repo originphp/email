@@ -1,9 +1,11 @@
 {
     "name": "originphp/email",
-    "description": "Origin Email",
+    "description": "OriginPHP Email",
     "type": "library",
     "keywords": [
-        "originphp"
+        "originphp",
+        "email",
+        "smtp"
     ],
     "homepage": "https://www.originphp.com",
     "license": "MIT",
