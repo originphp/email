@@ -22,7 +22,6 @@ use Origin\Email\Exception\SmtpException;
 
 class MockEmail extends Email
 {
-    use TestTrait;
     protected $boundary = '0000000000000000000000000000';
     public static $backup = [];
     
