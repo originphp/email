@@ -17,6 +17,8 @@ namespace Origin\Email;
 
 use \Exception;
 use \InvalidArgumentException;
+use \BadMethodCallException;
+use Origin\Email\Exception\SmtpException;
 
 class Email
 {
@@ -394,7 +396,7 @@ class Email
 
             return $this;
         }
-        throw new Exception($filename . ' not found');
+        throw new InvalidArgumentException($filename . ' not found');
     }
 
     /**
@@ -425,19 +427,19 @@ class Email
     public function send(bool $debug = false): Message
     {
         if (empty($this->from)) {
-            throw new Exception('From email is not set.');
+            throw new BadMethodCallException('From email is not set.');
         }
 
         if (empty($this->to)) {
-            throw new Exception('To email is not set.');
+            throw new BadMethodCallException('To email is not set.');
         }
 
         if (($this->format() === 'html' or $this->format() === 'both') and empty($this->htmlMessage)) {
-            throw new Exception('Html Message not set.');
+            throw new BadMethodCallException('Html Message not set.');
         }
 
         if (($this->format() === 'text' or $this->format() === 'both') and empty($this->textMessage)) {
-            throw new Exception('Text Message not set.');
+            throw new BadMethodCallException('Text Message not set.');
         }
 
         $this->message = $this->render();
@@ -539,7 +541,7 @@ class Email
             $this->sendCommand('STARTTLS', '220');
             // stream_socket can return bool or int
             if (stream_socket_enable_crypto($this->socket, true, STREAM_CRYPTO_METHOD_TLS_CLIENT) !== true) {
-                throw new Exception('The server did not accept the TLS connection.');
+                throw new SmtpException('The server did not accept the TLS connection.');
             }
             $this->sendCommand("EHLO {$domain}", '250');
         }
@@ -591,7 +593,7 @@ class Email
 
             $info = stream_get_meta_data($this->socket);
             if ($info['timed_out'] or (time() - $startTime) >= $this->account['timeout']) {
-                throw new Exception('SMTP timeout.');
+                throw new SmtpException('SMTP timeout.');
             }
         }
 
@@ -602,7 +604,7 @@ class Email
             return $code; // Return response code
         }
 
-        throw new Exception(sprintf('SMTP Error: %s', $response));
+        throw new SmtpException(sprintf('SMTP Error: %s', $response));
     }
 
     /**
@@ -644,7 +646,7 @@ class Email
 
         if (! $this->isConnected()) {
             $this->socketLog('Unable to connect to the SMTP server.');
-            throw new Exception('Unable to connect to the SMTP server.');
+            throw new SmtpException('Unable to connect to the SMTP server.');
         }
         $this->socketLog('Connected to SMTP server.');
 
@@ -707,7 +709,7 @@ class Email
         if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
             return true;
         }
-        throw new Exception(sprintf('Invalid email address %s', $email));
+        throw new InvalidArgumentException(sprintf('Invalid email address %s', $email));
     }
 
     /**
@@ -760,7 +762,7 @@ class Email
          */
         foreach ($headers as $header) {
             if (! $this->validateHeader($header)) {
-                throw new Exception(sprintf('Possible Email Header Injection `%s`', $header));
+                throw new InvalidArgumentException(sprintf('Possible Email Header Injection `%s`', $header));
             }
         }
 

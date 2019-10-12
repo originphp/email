@@ -17,6 +17,8 @@ namespace Origin\Test\Mailer;
 use \Exception;
 use Origin\Email\Email;
 use \InvalidArgumentException;
+use \BadMethodCallException;
+use Origin\Email\Exception\SmtpException;
 
 trait TestTrait
 {
@@ -674,22 +676,22 @@ class EmailTest extends \PHPUnit\Framework\TestCase
     }
     /**
      * to test from the command line
-     *  GMAIL_USERNAME=username@gmail.com GMAIL_PASSWORD=secret phpunit TestCase/Utility/EmailTest.php
+     *  EMAIL_USERNAME=username@gmail.com EMAIL_PASSWORD=secret phpunit TestCase/Utility/EmailTest.php
      *
      * @return void
      */
     public function testSmtpSend()
     {
-        if (! $this->env('GMAIL_USERNAME') or ! $this->env('GMAIL_PASSWORD')) {
+        if (! $this->env('EMAIL_USERNAME') or ! $this->env('EMAIL_PASSWORD')) {
             $this->markTestSkipped(
                 'GMAIL username and password not setup'
             );
         }
-       
+ 
         $email = new Email($this->getConfig());
-        $email->to($this->env('GMAIL_USERNAME'))
+        $email->to($this->env('EMAIL_ADDRESS'))
             ->subject('PHPUnit Test: ' . date('Y-m-d H:i:s'))
-            ->from($this->env('GMAIL_USERNAME'), 'PHP Unit')
+            ->from($this->env('EMAIL_ADDRESS'), 'PHP Unit')
             ->format('both')
             ->htmlMessage('<p>This is an email test to ensure that the framework can send emails properly and can include this in code coverage.<p>')
             ->textMessage('This is an email test to ensure that the framework can send emails properly and can include this in code coverage.');
@@ -707,37 +709,35 @@ class EmailTest extends \PHPUnit\Framework\TestCase
     public function testCheckSmtpLog(string $log)
     {
         $this->assertStringContainsString('EHLO [192.168.1.7]', $log);
-        $this->assertStringContainsString('MAIL FROM: <'.$this->env('GMAIL_USERNAME').'>', $log);
-        $this->assertStringContainsString('RCPT TO: <'.$this->env('GMAIL_USERNAME').'>', $log);
+        $this->assertStringContainsString('MAIL FROM: <'.$this->env('EMAIL_ADDRESS').'>', $log);
+        $this->assertStringContainsString('RCPT TO: <'.$this->env('EMAIL_ADDRESS').'>', $log);
     }
 
     /**
-     * to test from the command line
-     *  GMAIL_USERNAME=username@gmail.com GMAIL_PASSWORD=secret phpunit TestCase/Utility/EmailTest.php
-     *
-     * @return void
+     * If GMAIL account is configured then test sending
      */
     public function testSmtpSendTLS()
     {
-        if (! $this->env('GMAIL_USERNAME') or ! $this->env('GMAIL_PASSWORD')) {
+        if ($this->env('EMAIL_HOST') !== 'smtp.gmail.com' or ! $this->env('EMAIL_USERNAME') or ! $this->env('EMAIL_PASSWORD')) {
             $this->markTestSkipped(
                 'GMAIL username and password not setup'
             );
         }
+        
         $config = [
             'host' => 'smtp.gmail.com',
             'port' => 587,
-            'username' => $this->env('GMAIL_USERNAME'),
-            'password' => $this->env('GMAIL_PASSWORD'),
+            'username' => $this->env('EMAIL_USERNAME'),
+            'password' => $this->env('EMAIL_PASSWORD'),
             'ssl' => false,
             'tls' => true,
             'domain' => '[192.168.1.7]',
         ];
 
         $email = new Email($config);
-        $email->to($this->env('GMAIL_USERNAME'))
+        $email->to($this->env('EMAIL_ADDRESS'))
             ->subject('PHPUnit Test: ' . date('Y-m-d H:i:s') .' [TLS]')
-            ->from($this->env('GMAIL_USERNAME'), 'PHP Unit')
+            ->from($this->env('EMAIL_ADDRESS'), 'PHP Unit')
             ->format('both')
             ->htmlMessage('<p>This is an email test to ensure that the framework can send emails properly with TLS and can include this in code coverage.<p>')
             ->textMessage('This is an email test to ensure that the framework can send emails properly with TLS and can include this in code coverage.');
@@ -745,11 +745,38 @@ class EmailTest extends \PHPUnit\Framework\TestCase
         $this->assertNotEmpty($email->send());
     }
 
+    /**
+    *  SMTP Error: 535-5.7.8 Username and Password not accepted.
+    *  Alternative test if GMAIL settings are not provided to reach  enable TLS
+    */
+    public function testSmtpTLS()
+    {
+        $config = [
+            'host' => 'smtp.gmail.com',
+            'port' => 587,
+            'username' => 'invalid-email-address@gmail.com',
+            'password' => 'secret',
+            'ssl' => false,
+            'tls' => true,
+            'domain' => '[192.168.1.7]',
+        ];
+
+        $this->expectException(SmtpException::class);
+        $email = new Email($config);
+        $email->to('info@originphp.com')
+            ->subject('PHPUnit Test: ' . date('Y-m-d H:i:s') .' [TLS]')
+            ->from('invalid-email-address@gmail.com', 'PHP Unit')
+            ->textMessage('This wont actually get sent.');
+
+        $email->send();
+    }
+
+
     public function testErrorConnectingToServer()
     {
         $this->expectException(Exception::class);
 
-        if (! $this->env('GMAIL_USERNAME') or ! $this->env('GMAIL_PASSWORD')) {
+        if (! $this->env('EMAIL_USERNAME') or ! $this->env('EMAIL_PASSWORD')) {
             $this->markTestSkipped(
                 'GMAIL username and password not setup'
             );
@@ -765,9 +792,9 @@ class EmailTest extends \PHPUnit\Framework\TestCase
         ];
 
         $email = new Email($config);
-        $email->to($this->env('GMAIL_USERNAME'))
+        $email->to($this->env('EMAIL_USERNAME'))
             ->subject('PHPUnit Test: ' . date('Y-m-d H:i:s'))
-            ->from($this->env('GMAIL_USERNAME'), 'PHP Unit')
+            ->from($this->env('EMAIL_USERNAME'), 'PHP Unit')
             ->format('both')
             ->htmlMessage('<p>This is a test email</p>');
 
@@ -789,12 +816,12 @@ class EmailTest extends \PHPUnit\Framework\TestCase
     protected function getConfig()
     {
         return [
-            'host' => 'smtp.gmail.com',
-            'port' => 465,
-            'username' => $this->env('GMAIL_USERNAME'),
-            'password' => $this->env('GMAIL_PASSWORD'),
-            'ssl' => true,
-            'tls' => false,
+            'host' => $this->env('EMAIL_HOST'),
+            'port' => $this->env('EMAIL_PORT'),
+            'username' => $this->env('EMAIL_USERNAME'),
+            'password' => $this->env('EMAIL_PASSWORD'),
+            'ssl' => (bool) $this->env('EMAIL_SSL'),
+            'tls' => (bool) $this->env('EMAIL_TLS'),
             'domain' => '[192.168.1.7]',
         ];
     }

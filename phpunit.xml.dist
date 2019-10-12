@@ -19,8 +19,15 @@
     <php>
        <const name="PHPUNIT" value="true"/>
        <env name="ORIGIN_ENV" value="test"/>
-    
-       <!--env name="GMAIL_USERNAME" value="somebody@gmail.com"/>
-       <env name="GMAIL_PASSWORD" value="secret"/-->
+
+        <!-- Set email account configuration here
+        <env name="EMAIL_ADDRESS" value="your-account@gmail.com"/>
+        <env name="EMAIL_HOST" value="smtp.gmail.com"/>
+        <env name="EMAIL_USERNAME" value="your-account@gmail.com"/>
+        <env name="EMAIL_PASSWORD" value="secret"/>
+        <env name="EMAIL_PORT" value="465"/>
+        <env name="EMAIL_SSL" value="1"/>
+        <env name="EMAIL_TLS" value="0"/>
+        -->
     </php>
 </phpunit>
