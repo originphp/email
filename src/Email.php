@@ -626,10 +626,8 @@ class Email
      */
     protected function openSocket(array $account, array $options = []): void
     {
-        $protocol = 'tcp';
-        if ($account['ssl']) {
-            $protocol = 'ssl';
-        }
+        $protocol = $account['ssl'] ? 'ssl' : 'tcp';
+    
         $server = $protocol . '://' . $account['host'] . ':' . $account['port'];
         $this->socketLog('Connecting to ' . $server);
 
