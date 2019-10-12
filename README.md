@@ -59,7 +59,7 @@ The default email sending behavior is to send a text version. However it best pr
 
 When an email is sent it will return a Message object, if an error is encountered when sending then the email class will throw an exception which you can catch in try/catch block.
 
-### Sending an Email
+### Sending an Email (Text)
 
 To send an email
 
@@ -70,7 +70,6 @@ $Email->to('somebody@originphp.com')
     ->from('me@originphp.com')
     ->subject('This is a test')
     ->textMessage('This is the text content')
-    ->format('text')
     ->send();
 ```
 
