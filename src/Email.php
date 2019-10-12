@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 /**
  * OriginPHP Framework
@@ -18,7 +17,6 @@ namespace Origin\Email;
 
 use \Exception;
 use \InvalidArgumentException;
-use Origin\Email\Message;
 
 class Email
 {
@@ -70,7 +68,7 @@ class Email
      *
      * @var array
      */
-    protected $account = null;
+    protected $account = [];
 
     protected $socket = null;
     /**
@@ -105,7 +103,16 @@ class Email
     /**
      * Constructor
      *
-     * @param array $config
+     * @param array $config The following options keys are supported :
+     *   - host: hostname e.g smtp.gmail.com
+     *   - port: default 25
+     *   - username
+     *   - password
+     *   - tls: default false.
+     *   - ssl: default false
+     *   - domain: The FQDN of the server that is sending the email, if it is not from server then use [192.0.2.1]
+     *   - timeout: default 30 seconds
+     *   - engine: Smtp. You can use test, then email is not sent
      */
     public function __construct(array $config)
     {
@@ -433,10 +440,6 @@ class Email
             throw new Exception('Text Message not set.');
         }
 
-        if ($this->account === null) {
-            throw new Exception('Email config has not been set.');
-        }
-
         $this->message = $this->render();
 
         if ($this->account['engine'] === 'Test' or $debug === true) {
@@ -444,6 +447,7 @@ class Email
         }
 
         $this->smtpSend();
+
         return $this->message;
     }
 
@@ -459,9 +463,8 @@ class Email
             $headers .= "{$header}: {$value}" . self::CRLF;
         }
         $message = implode(self::CRLF, $this->buildMessage());
-        $message = new Message($headers, $message);
 
-        return $message;
+        return new Message($headers, $message);
     }
 
     /**

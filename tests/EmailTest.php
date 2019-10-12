@@ -14,8 +14,8 @@
 
 namespace Origin\Test\Mailer;
 
-use Origin\Email\Email;
 use \Exception;
+use Origin\Email\Email;
 use \InvalidArgumentException;
 
 trait TestTrait
@@ -70,7 +70,7 @@ class EmailTest extends \PHPUnit\Framework\TestCase
 
     public function testTo()
     {
-        $email = new MockEmail(['engine'=>'Test']);
+        $email = new MockEmail(['engine' => 'Test']);
         $email = $email->to('james@originphp.com');
         $this->assertInstanceOf(Email::class, $email);
         $property = $email->getProperty('to');
@@ -82,7 +82,7 @@ class EmailTest extends \PHPUnit\Framework\TestCase
     }
     public function testFrom()
     {
-        $email = new MockEmail(['engine'=>'Test']);
+        $email = new MockEmail(['engine' => 'Test']);
         $email = $email->from('james@originphp.com');
         $this->assertInstanceOf(Email::class, $email);
         $property = $email->getProperty('from');
@@ -96,7 +96,7 @@ class EmailTest extends \PHPUnit\Framework\TestCase
 
     public function testSender()
     {
-        $email = new MockEmail(['engine'=>'Test']);
+        $email = new MockEmail(['engine' => 'Test']);
         $email = $email->sender('james@originphp.com');
         $this->assertInstanceOf(Email::class, $email);
         $property = $email->getProperty('sender');
@@ -109,7 +109,7 @@ class EmailTest extends \PHPUnit\Framework\TestCase
 
     public function testReplyTo()
     {
-        $email = new MockEmail(['engine'=>'Test']);
+        $email = new MockEmail(['engine' => 'Test']);
         $email = $email->replyTo('james@originphp.com');
         $this->assertInstanceOf(Email::class, $email);
         $property = $email->getProperty('replyTo');
@@ -122,7 +122,7 @@ class EmailTest extends \PHPUnit\Framework\TestCase
 
     public function testReturnPath()
     {
-        $email = new MockEmail(['engine'=>'Test']);
+        $email = new MockEmail(['engine' => 'Test']);
         $email = $email->returnPath('james@originphp.com');
         $this->assertInstanceOf(Email::class, $email);
         $property = $email->getProperty('returnPath');
@@ -135,7 +135,7 @@ class EmailTest extends \PHPUnit\Framework\TestCase
 
     public function testBcc()
     {
-        $email = new MockEmail(['engine'=>'Test']);
+        $email = new MockEmail(['engine' => 'Test']);
         $email = $email->bcc('james@originphp.com');
         $this->assertInstanceOf(Email::class, $email);
         $property = $email->getProperty('bcc');
@@ -148,7 +148,7 @@ class EmailTest extends \PHPUnit\Framework\TestCase
 
     public function testCc()
     {
-        $email = new MockEmail(['engine'=>'Test']);
+        $email = new MockEmail(['engine' => 'Test']);
         $email = $email->cc('james@originphp.com');
         $this->assertInstanceOf(Email::class, $email);
         $property = $email->getProperty('cc');
@@ -164,7 +164,7 @@ class EmailTest extends \PHPUnit\Framework\TestCase
      */
     public function testAddTo()
     {
-        $email = new MockEmail(['engine'=>'Test']);
+        $email = new MockEmail(['engine' => 'Test']);
         $email = $email->to('james@originphp.com', 'James');
         $email = $email->addTo('guest@originphp.com', 'Guest');
         $property = $email->getProperty('to');
@@ -176,7 +176,7 @@ class EmailTest extends \PHPUnit\Framework\TestCase
      */
     public function testAddCc()
     {
-        $email = new MockEmail(['engine'=>'Test']);
+        $email = new MockEmail(['engine' => 'Test']);
         $email = $email->cc('james@originphp.com', 'James');
         $email = $email->addCc('guest@originphp.com', 'Guest');
         $property = $email->getProperty('cc');
@@ -188,7 +188,7 @@ class EmailTest extends \PHPUnit\Framework\TestCase
      */
     public function testAddBcc()
     {
-        $email = new MockEmail(['engine'=>'Test']);
+        $email = new MockEmail(['engine' => 'Test']);
         $email = $email->bcc('james@originphp.com', 'James');
         $email = $email->addBcc('guest@originphp.com', 'Guest');
         $property = $email->getProperty('bcc');
@@ -219,7 +219,7 @@ class EmailTest extends \PHPUnit\Framework\TestCase
 
     public function testSubject()
     {
-        $email = new MockEmail(['engine'=>'Test']);
+        $email = new MockEmail(['engine' => 'Test']);
         $email = $email->subject('A subject line');
         $this->assertInstanceOf(Email::class, $email);
         $this->assertEquals('A subject line', $email->getProperty('subject'));
@@ -227,7 +227,7 @@ class EmailTest extends \PHPUnit\Framework\TestCase
 
     public function testTextMessage()
     {
-        $email = new MockEmail(['engine'=>'Test']);
+        $email = new MockEmail(['engine' => 'Test']);
         $email = $email->textMessage('Text message.');
         $this->assertInstanceOf(Email::class, $email);
         $this->assertEquals('Text message.', $email->getProperty('textMessage'));
@@ -235,17 +235,15 @@ class EmailTest extends \PHPUnit\Framework\TestCase
 
     public function testHtmlMessage()
     {
-        $email = new MockEmail(['engine'=>'Test']);
+        $email = new MockEmail(['engine' => 'Test']);
         $email = $email->htmlMessage('<p>Html message.</p>');
         $this->assertInstanceOf(Email::class, $email);
         $this->assertEquals('<p>Html message.</p>', $email->getProperty('htmlMessage'));
     }
 
-  
-
     public function testAddHeader()
     {
-        $email = new MockEmail(['engine'=>'Test']);
+        $email = new MockEmail(['engine' => 'Test']);
         $email = $email->addHeader('X-mailer', 'OriginPHP');
         $this->assertInstanceOf(Email::class, $email);
         $this->assertEquals(['X-mailer' => 'OriginPHP'], $email->getProperty('additionalHeaders'));
@@ -253,7 +251,7 @@ class EmailTest extends \PHPUnit\Framework\TestCase
 
     public function testAddAttachment()
     {
-        $email = new MockEmail(['engine'=>'Test']);
+        $email = new MockEmail(['engine' => 'Test']);
         $email = $email->addAttachment($this->directory() . '/phpunit.xml.dist');
         $this->assertInstanceOf(Email::class, $email);
 
@@ -274,7 +272,7 @@ class EmailTest extends \PHPUnit\Framework\TestCase
      */
     public function testAddAttachments()
     {
-        $email = new MockEmail(['engine'=>'Test']);
+        $email = new MockEmail(['engine' => 'Test']);
         $email = $email->addAttachments([
             $this->directory() . '/phpunit.xml.dist',
             $this->directory() . '/README.md' => 'Important.md',
@@ -291,7 +289,7 @@ class EmailTest extends \PHPUnit\Framework\TestCase
 
     public function testBuildMessageHeaderCore()
     {
-        $email = new MockEmail(['engine'=>'Test']);
+        $email = new MockEmail(['engine' => 'Test']);
         $email->to('james@originphp.com')
             ->from('mailer@originphp.com')
             ->subject('test #1')
@@ -320,7 +318,7 @@ class EmailTest extends \PHPUnit\Framework\TestCase
 
     public function testBuildMessageHeaderOptional()
     {
-        $email = new MockEmail(['engine'=>'Test']);
+        $email = new MockEmail(['engine' => 'Test']);
         $email->to('james@originphp.com')
             ->from('mailer@originphp.com')
             ->subject('test #2')
@@ -343,7 +341,7 @@ class EmailTest extends \PHPUnit\Framework\TestCase
     public function testBuildMessageHeaderEncoding()
     {
         // Check subject and names of headers are encoded
-        $email = new MockEmail(['engine'=>'Test']);
+        $email = new MockEmail(['engine' => 'Test']);
         $email->to('ragnar@originphp.com', 'Ragnarr Loþbrók')
             ->from('mailer@originphp.com')
             ->subject('Valhöll')
@@ -356,7 +354,7 @@ class EmailTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse(isset($headers['Content-Transfer-Encoding'])); // Dont encode message
 
         // If we have UTF8 chars in message we need the header ContentTransferEncoding
-        $email = new MockEmail(['engine'=>'Test']);
+        $email = new MockEmail(['engine' => 'Test']);
         $email->to('james@originphp.com')
             ->from('mailer@originphp.com')
             ->subject('test #2')
@@ -369,7 +367,7 @@ class EmailTest extends \PHPUnit\Framework\TestCase
 
     public function testBuildMessageHeaderContentType()
     {
-        $email = new MockEmail(['engine'=>'Test']);
+        $email = new MockEmail(['engine' => 'Test']);
         $email->to('james@originphp.com')
             ->from('mailer@originphp.com')
             ->subject('test #1')
@@ -380,7 +378,7 @@ class EmailTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals('text/plain; charset="UTF-8"', $headers['Content-Type']);
 
-        $email = new MockEmail(['engine'=>'Test']);
+        $email = new MockEmail(['engine' => 'Test']);
         $email->to('james@originphp.com')
             ->from('mailer@originphp.com')
             ->subject('test #1')
@@ -391,7 +389,7 @@ class EmailTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals('text/html; charset="UTF-8"', $headers['Content-Type']);
 
-        $email = new MockEmail(['engine'=>'Test']);
+        $email = new MockEmail(['engine' => 'Test']);
         $email->to('james@originphp.com')
             ->from('mailer@originphp.com')
             ->subject('test #1')
@@ -407,7 +405,7 @@ class EmailTest extends \PHPUnit\Framework\TestCase
 
     public function testCreateMessageText()
     {
-        $email = new MockEmail(['engine'=>'Test']);
+        $email = new MockEmail(['engine' => 'Test']);
         $email->to('james@originphp.com')
             ->from('mailer@originphp.com')
             ->subject('text test')
@@ -419,7 +417,7 @@ class EmailTest extends \PHPUnit\Framework\TestCase
 
     public function testCreateMessageTextAttachments()
     {
-        $email = new MockEmail(['engine'=>'Test']);
+        $email = new MockEmail(['engine' => 'Test']);
         $email->to('james@originphp.com')
             ->from('mailer@originphp.com')
             ->subject('text test')
@@ -441,7 +439,7 @@ class EmailTest extends \PHPUnit\Framework\TestCase
 
     public function testCreateMessageHtml()
     {
-        $email = new MockEmail(['engine'=>'Test']);
+        $email = new MockEmail(['engine' => 'Test']);
         $email->to('james@originphp.com')
             ->from('mailer@originphp.com')
             ->subject('html test')
@@ -453,7 +451,7 @@ class EmailTest extends \PHPUnit\Framework\TestCase
 
     public function testCreateMessageHtmlAttachments()
     {
-        $email = new MockEmail(['engine'=>'Test']);
+        $email = new MockEmail(['engine' => 'Test']);
         $email->to('james@originphp.com')
             ->from('mailer@originphp.com')
             ->subject('text test')
@@ -475,7 +473,7 @@ class EmailTest extends \PHPUnit\Framework\TestCase
 
     public function testCreateMessageBoth()
     {
-        $email = new MockEmail(['engine'=>'Test']);
+        $email = new MockEmail(['engine' => 'Test']);
         $email->to('james@originphp.com')
             ->from('mailer@originphp.com')
             ->subject('text test')
@@ -504,14 +502,13 @@ class EmailTest extends \PHPUnit\Framework\TestCase
 
     public function testCreateMessageBothAttachments()
     {
-        $email = new MockEmail(['engine'=>'Test']);
+        $email = new MockEmail(['engine' => 'Test']);
         $email->to('james@originphp.com')
             ->from('mailer@originphp.com')
             ->subject('text test')
             ->textMessage('this is a test')
             ->htmlMessage('<p>this is a test</p>')
             ->format('both');
-
 
         $tempfile = tempnam(sys_get_temp_dir(), 'tmp');
         file_put_contents($tempfile, 'foo/bar');
@@ -531,7 +528,7 @@ class EmailTest extends \PHPUnit\Framework\TestCase
      */
     public function testMultipleAttachments()
     {
-        $email = new MockEmail(['engine'=>'Test']);
+        $email = new MockEmail(['engine' => 'Test']);
         $email->to('james@originphp.com')
             ->from('mailer@originphp.com')
             ->subject('text test')
@@ -578,7 +575,6 @@ class EmailTest extends \PHPUnit\Framework\TestCase
     {
         return implode("\r\n", $result);
     }
-
 
     public function testApplyConfig()
     {
@@ -630,11 +626,10 @@ class EmailTest extends \PHPUnit\Framework\TestCase
         $this->assertStringContainsString($expected, $result);
     }
    
-
     public function testSendNoFromAddress()
     {
         $this->expectException(Exception::class);
-        $email = new Email(['engine'=>'Test']);
+        $email = new Email(['engine' => 'Test']);
         $email->to('james@originphp.com')
             ->subject('simple test')
             ->format('text')
@@ -644,19 +639,18 @@ class EmailTest extends \PHPUnit\Framework\TestCase
     public function testSendNoToAddress()
     {
         $this->expectException(Exception::class);
-        $email = new Email(['engine'=>'Test']);
+        $email = new Email(['engine' => 'Test']);
         $email->from('james@originphp.com')
-        ->subject('simple test')
-        ->format('text')
-        ->textMessage('not really imporant');
+            ->subject('simple test')
+            ->format('text')
+            ->textMessage('not really imporant');
         $email->send();
     }
-
 
     public function testSendTextMessageNotSet()
     {
         $this->expectException(Exception::class);
-        $email = new Email(['engine'=>'Test']);
+        $email = new Email(['engine' => 'Test']);
         $email->from('james@originphp.com')
             ->subject('exception testt')
             ->format('text');
@@ -666,7 +660,7 @@ class EmailTest extends \PHPUnit\Framework\TestCase
     public function testSendHtmlMessageNotSet()
     {
         $this->expectException(Exception::class);
-        $email = new Email(['engine'=>'Test']);
+        $email = new Email(['engine' => 'Test']);
         $email->from('james@originphp.com')
             ->subject('exception test')
             ->format('html');
@@ -675,7 +669,7 @@ class EmailTest extends \PHPUnit\Framework\TestCase
 
     public function testSmtpLog()
     {
-        $email = new MockEmail(['engine'=>'Test']);
+        $email = new MockEmail(['engine' => 'Test']);
         $this->assertIsArray($email->smtpLog());
     }
     /**
@@ -787,7 +781,7 @@ class EmailTest extends \PHPUnit\Framework\TestCase
      */
     public function testEmailValidationAgainstHeaderInjection()
     {
-        $email = new MockEmail(['engine'=>'Test']);
+        $email = new MockEmail(['engine' => 'Test']);
         $this->expectException(Exception::class);
         $email->callMethod('validateEmail', ["mailer@originphp.com\nOmg: injected"]);
     }
@@ -804,7 +798,6 @@ class EmailTest extends \PHPUnit\Framework\TestCase
             'domain' => '[192.168.1.7]',
         ];
     }
-
 
     public function testInvalidFormat()
     {
@@ -876,7 +869,6 @@ class EmailTest extends \PHPUnit\Framework\TestCase
         $this->assertStringContainsString('Content-Transfer-Encoding: quoted-printable', $result);
         $this->assertStringContainsString('The email message has non-ascii chars Ragnarr Lo=C3=BEbr=C3=B3k', $result);
     }
-
 
     protected function env(string $key)
     {
