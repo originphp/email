@@ -70,6 +70,8 @@ class EmailTest extends \PHPUnit\Framework\TestCase
         return dirname(__DIR__);
     }
 
+
+
     public function testTo()
     {
         $email = new MockEmail(['engine' => 'Test']);
@@ -598,7 +600,8 @@ class EmailTest extends \PHPUnit\Framework\TestCase
         $email = new MockEmail(['engine' => 'Test']);
         $email->to('james@originphp.com')
             ->from('mailer@originphp.com')
-            ->subject('html test');
+            ->subject('html test')
+            ->format('text');
         $email->send();
     }
 
@@ -627,6 +630,37 @@ class EmailTest extends \PHPUnit\Framework\TestCase
         $expected = "--0000000000000000000000000000\r\nContent-Type: text/plain; charset=\"UTF-8\"\r\n\r\nthis is a test\r\n\r\n--0000000000000000000000000000\r\nContent-Type: text/html; charset=\"UTF-8\"\r\n\r\n<p>this is a test</p>\r\n\r\n--0000000000000000000000000000--";
         $this->assertStringContainsString($expected, $result);
     }
+
+    public function testSendTextWithoutSmtp()
+    {
+        $email = new MockEmail(['engine' => 'Test']);
+        $email->to('james@originphp.com')
+            ->from('mailer@originphp.com')
+            ->subject('text test')
+            ->textMessage('this is a test')
+            ->charset('ISO-8859-1');
+
+        $message = $email->send();
+
+        $this->assertStringContainsString('Content-Type: text/plain; charset="ISO-8859-1"', $message->header());
+        $this->assertStringContainsString('this is a test', $message->message());
+    }
+
+    public function testConnectionError()
+    {
+        $this->expectException(SmtpException::class);
+        $email = new Email([
+            'host' => 'foo.originphp.com'
+        ]);
+        $email->to('james@originphp.com')
+        ->from('mailer@originphp.com')
+        ->subject('text test')
+        ->textMessage('this is a test')
+        ->charset('ISO-8859-1');
+        $email->send();
+    }
+
+  
    
     public function testSendNoFromAddress()
     {
