@@ -20,8 +20,24 @@ use \InvalidArgumentException;
 use \BadMethodCallException;
 use Origin\Email\Exception\SmtpException;
 
-trait TestTrait
+class MockEmail extends Email
 {
+    use TestTrait;
+    protected $boundary = '0000000000000000000000000000';
+    public static $backup = [];
+    
+    public static function backup()
+    {
+        static::$backup = static::$config;
+    }
+    /**
+     * Reset config for testing
+     */
+    public static function reset()
+    {
+        static::$config = static::$backup;
+    }
+
     public function callMethod(string $method, array $args = [])
     {
         if (empty($args)) {
@@ -41,25 +57,6 @@ trait TestTrait
     public function setProperty(string $property, $value)
     {
         $this->$property = $value;
-    }
-}
-
-class MockEmail extends Email
-{
-    use TestTrait;
-    protected $boundary = '0000000000000000000000000000';
-    public static $backup = [];
-    
-    public static function backup()
-    {
-        static::$backup = static::$config;
-    }
-    /**
-     * Reset config for testing
-     */
-    public static function reset()
-    {
-        static::$config = static::$backup;
     }
 }
 
