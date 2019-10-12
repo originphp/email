@@ -53,12 +53,28 @@ For example
 ]
 ```
 
-
 ## Sending Emails
 
-The default email sending behavior is to send a HTML message with a text version, which is a best practice and reduces the risk of your email ending up in spam folders. 
+The default email sending behavior is to send a text version. However it best practice to send both HTML and text and this reduces the risk of your email ending up in spam folders. 
 
-### Send an Email
+When an email is sent it will return a Message object, if an error is encountered when sending then the email class will throw an exception which you can catch in try/catch block.
+
+### Sending an Email
+
+To send an email
+
+```php
+use Origin\Email\Email;
+$Email = new Email();
+$Email->to('somebody@originphp.com')
+    ->from('me@originphp.com')
+    ->subject('This is a test')
+    ->textMessage('This is the text content')
+    ->format('text')
+    ->send();
+```
+
+### Send both a HTML and Text Version (Recommend)
 
 To send an email with both HTML and text versions:
 
@@ -70,12 +86,13 @@ $Email->to('somebody@originphp.com')
     ->subject('This is a test')
     ->textMessage('This is the text content')
     ->htmlMessage('<p>This is the html content</p>')
+    ->format('both')
     ->send();
 ```
 
 ### Sending HTML Only Email
 
-To send a HTML only email, you need to tell the Email utility use the html format.
+To send a HTML only email, you need to tell the Email utility use the HTML format.
 
 ```php
 use Origin\Email\Email;
@@ -85,21 +102,6 @@ $Email->to('somebody@originphp.com')
     ->subject('This is a test')
     ->htmlMessage('<p>This is the html content</p>')
     ->format('html')
-    ->send();
-```
-
-### Sending Text Email
-
-To send a text email, you need to tell the Email utility use the text format.
-
-```php
-use Origin\Email\Email;
-$Email = new Email();
-$Email->to('somebody@originphp.com')
-    ->from('me@originphp.com')
-    ->subject('This is a test')
-    ->textMessage('This is the text content')
-    ->format('text')
     ->send();
 ```
 
