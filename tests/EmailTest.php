@@ -643,7 +643,7 @@ class EmailTest extends \PHPUnit\Framework\TestCase
         $message = $email->send();
 
         $this->assertStringContainsString('Content-Type: text/plain; charset="ISO-8859-1"', $message->header());
-        $this->assertStringContainsString('this is a test', $message->message());
+        $this->assertStringContainsString('this is a test', $message->body());
     }
 
     public function testConnectionError()
@@ -925,7 +925,7 @@ class EmailTest extends \PHPUnit\Framework\TestCase
             ->htmlMessage('The email message has non-ascii chars Ragnarr Loþbrók.')
             ->format('html') // use HTML or TEXT only message. Not both
             ->addAttachment($filename);
-        $result = $email->send()->message();
+        $result = (string) $email->send();
         $this->assertStringContainsString('Content-Type: text/html; charset="UTF-8"', $result);
         $this->assertStringContainsString('Content-Transfer-Encoding: quoted-printable', $result);
         $this->assertStringContainsString('The email message has non-ascii chars Ragnarr Lo=C3=BEbr=C3=B3k', $result);
