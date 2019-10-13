@@ -1,4 +1,5 @@
 <?php
+
 /**
  * OriginPHP Framework
  * Copyright 2018 - 2019 Jamiel Sharief.
@@ -16,15 +17,15 @@ namespace Origin\Test\Mailer;
 
 use \Exception;
 use Origin\Email\Email;
-use \InvalidArgumentException;
 use \BadMethodCallException;
+use \InvalidArgumentException;
 use Origin\Email\Exception\SmtpException;
 
 class MockEmail extends Email
 {
     protected $boundary = '0000000000000000000000000000';
     public static $backup = [];
-    
+
     public static function backup()
     {
         static::$backup = static::$config;
@@ -66,7 +67,48 @@ class EmailTest extends \PHPUnit\Framework\TestCase
         return dirname(__DIR__);
     }
 
+    public function testAccount()
+    {
+        $config = [
+            'host' => 'smtp.example.com',
+            'port' => 587,
+            'username' => 'somebody@example.com',
+            'password' => 'secret',
+            'ssl' => false,
+            'tls' => true,
+            'domain' => '[192.168.1.7]'
+        ];
 
+        Email::config('foo', $config);
+
+        $email = new Email('foo');
+
+        $config += ['engine' => 'Smtp', 'timeout' => 30];
+        $this->assertEquals($config, $email->account());
+    }
+
+    public function testNoAccountSend()
+    {
+        $this->expectException(BadMethodCallException::class);
+        $email = new Email();
+        $email->to('me@example.com')
+            ->from('you@example.com')
+            ->subject('none')
+            ->textMessage('Hello')
+            ->send();
+    }
+
+    public function testInvalidAccount()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $email = new Email();
+        $email->to('me@example.com')
+            ->from('you@example.com')
+            ->subject('none')
+            ->textMessage('Hello')
+            ->account('does-no-exist')
+            ->send();
+    }
 
     public function testTo()
     {
@@ -198,9 +240,9 @@ class EmailTest extends \PHPUnit\Framework\TestCase
     public function testCcDefault()
     {
         $email = new MockEmail([
-            'cc' => ['james@originphp.com','guest@originphp.com' => 'Guest'],
+            'cc' => ['james@originphp.com', 'guest@originphp.com' => 'Guest'],
         ]);
-      
+
         $property = $email->getProperty('cc');
         $this->assertEquals(['james@originphp.com', null], $property[0]);
         $this->assertEquals(['guest@originphp.com', 'Guest'], $property[1]);
@@ -209,9 +251,9 @@ class EmailTest extends \PHPUnit\Framework\TestCase
     public function testBccDefault()
     {
         $email = new MockEmail([
-            'bcc' => ['james@originphp.com','guest@originphp.com' => 'Guest'],
+            'bcc' => ['james@originphp.com', 'guest@originphp.com' => 'Guest'],
         ]);
-      
+
         $property = $email->getProperty('bcc');
         $this->assertEquals(['james@originphp.com', null], $property[0]);
         $this->assertEquals(['guest@originphp.com', 'Guest'], $property[1]);
@@ -300,7 +342,7 @@ class EmailTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals('1.0', $headers['MIME-Version']);
         $this->assertEquals(date('r'), $headers['Date']);
-        $validUUID = (bool)preg_match('/^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}@originphp.com$/i', $headers['Message-ID']);
+        $validUUID = (bool) preg_match('/^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}@originphp.com$/i', $headers['Message-ID']);
         $this->assertTrue($validUUID);
         $this->assertEquals('test #1', $headers['Subject']);
         $this->assertEquals('mailer@originphp.com', $headers['From']);
@@ -567,15 +609,15 @@ class EmailTest extends \PHPUnit\Framework\TestCase
     public function testApplyConfig()
     {
         $config = ['to' => 'to@example.com', 'from' => 'from@example.com', 'sender' => 'sender@example.com', 'bcc' => 'bcc@example.com', 'cc' => 'cc@example.com', 'replyTo' => 'replyTo@example.com'];
-      
+
         $email = new MockEmail($config);
-  
-        $this->assertEquals(['to@example.com',null], $email->getProperty('to')[0]);
-        $this->assertEquals(['from@example.com',null], $email->getProperty('from'));
-        $this->assertEquals(['bcc@example.com',null], $email->getProperty('bcc')[0]);
-        $this->assertEquals(['cc@example.com',null], $email->getProperty('cc')[0]);
-        $this->assertEquals(['sender@example.com',null], $email->getProperty('sender'));
-        $this->assertEquals(['replyTo@example.com',null], $email->getProperty('replyTo'));
+
+        $this->assertEquals(['to@example.com', null], $email->getProperty('to')[0]);
+        $this->assertEquals(['from@example.com', null], $email->getProperty('from'));
+        $this->assertEquals(['bcc@example.com', null], $email->getProperty('bcc')[0]);
+        $this->assertEquals(['cc@example.com', null], $email->getProperty('cc')[0]);
+        $this->assertEquals(['sender@example.com', null], $email->getProperty('sender'));
+        $this->assertEquals(['replyTo@example.com', null], $email->getProperty('replyTo'));
     }
 
     public function testSendNoHtmlMessageException()
@@ -637,15 +679,13 @@ class EmailTest extends \PHPUnit\Framework\TestCase
             'host' => 'foo.originphp.com'
         ]);
         $email->to('james@originphp.com')
-        ->from('mailer@originphp.com')
-        ->subject('text test')
-        ->textMessage('this is a test')
-        ->charset('ISO-8859-1');
+            ->from('mailer@originphp.com')
+            ->subject('text test')
+            ->textMessage('this is a test')
+            ->charset('ISO-8859-1');
         $email->send();
     }
 
-  
-   
     public function testSendNoFromAddress()
     {
         $this->expectException(Exception::class);
@@ -705,7 +745,7 @@ class EmailTest extends \PHPUnit\Framework\TestCase
                 'GMAIL username and password not setup'
             );
         }
- 
+
         $email = new Email($this->getConfig());
         $email->to($this->env('EMAIL_ADDRESS'))
             ->subject('PHPUnit Test: ' . date('Y-m-d H:i:s'))
@@ -726,8 +766,8 @@ class EmailTest extends \PHPUnit\Framework\TestCase
     public function testCheckSmtpLog(string $log)
     {
         $this->assertStringContainsString('EHLO [192.168.1.7]', $log);
-        $this->assertStringContainsString('MAIL FROM: <'.$this->env('EMAIL_ADDRESS').'>', $log);
-        $this->assertStringContainsString('RCPT TO: <'.$this->env('EMAIL_ADDRESS').'>', $log);
+        $this->assertStringContainsString('MAIL FROM: <' . $this->env('EMAIL_ADDRESS') . '>', $log);
+        $this->assertStringContainsString('RCPT TO: <' . $this->env('EMAIL_ADDRESS') . '>', $log);
     }
 
     /**
@@ -740,7 +780,7 @@ class EmailTest extends \PHPUnit\Framework\TestCase
                 'GMAIL username and password not setup'
             );
         }
-        
+
         $config = [
             'host' => 'smtp.gmail.com',
             'port' => 587,
@@ -750,24 +790,23 @@ class EmailTest extends \PHPUnit\Framework\TestCase
             'tls' => true,
             'domain' => '[192.168.1.7]',
         ];
-
-        $email = new Email($config);
+        Email::config('test-working', $config);
+        $email = new Email();
         $email->to($this->env('EMAIL_ADDRESS'))
-            ->subject('PHPUnit Test: ' . date('Y-m-d H:i:s') .' [TLS]')
+            ->subject('PHPUnit Test: ' . date('Y-m-d H:i:s') . ' [TLS]')
             ->from($this->env('EMAIL_ADDRESS'), 'PHP Unit')
             ->format('both')
+            ->account('test-working')
             ->htmlMessage('<p>This is an email test to ensure that the framework can send emails properly with TLS and can include this in code coverage.<p>')
             ->textMessage('This is an email test to ensure that the framework can send emails properly with TLS and can include this in code coverage.');
 
         $this->assertNotEmpty($email->send());
     }
 
-    
-
     /**
-    *  SMTP Error: 535-5.7.8 Username and Password not accepted.
-    *  Alternative test if GMAIL settings are not provided to reach  enable TLS
-    */
+     *  SMTP Error: 535-5.7.8 Username and Password not accepted.
+     *  Alternative test if GMAIL settings are not provided to reach  enable TLS
+     */
     public function testSmtpTLS()
     {
         $config = [
@@ -780,16 +819,17 @@ class EmailTest extends \PHPUnit\Framework\TestCase
             'domain' => '[192.168.1.7]',
         ];
 
+        Email::config('incorrect-again', $config);
         $this->expectException(SmtpException::class);
         $email = new Email($config);
         $email->to('info@originphp.com')
-            ->subject('PHPUnit Test: ' . date('Y-m-d H:i:s') .' [TLS]')
+            ->subject('PHPUnit Test: ' . date('Y-m-d H:i:s') . ' [TLS]')
             ->from('invalid-email-address@gmail.com', 'PHP Unit')
-            ->textMessage('This wont actually get sent.');
+            ->textMessage('This wont actually get sent.')
+            ->account('incorrect-again');
 
         $email->send();
     }
-
 
     public function testErrorConnectingToServer()
     {
@@ -809,8 +849,9 @@ class EmailTest extends \PHPUnit\Framework\TestCase
             'tls' => false,
             'domain' => '[192.168.1.7]',
         ];
+        Email::config('incorrect', $config);
 
-        $email = new Email($config);
+        $email = new Email('incorrect');
         $email->to($this->env('EMAIL_USERNAME'))
             ->subject('PHPUnit Test: ' . date('Y-m-d H:i:s'))
             ->from($this->env('EMAIL_USERNAME'), 'PHP Unit')
@@ -865,7 +906,7 @@ class EmailTest extends \PHPUnit\Framework\TestCase
             ->returnPath('returnPath@originphp.com')
             ->format('text')->textMessage("Yo Adrian!\nRocky");
         $result = $email->send()->header();
-    
+
         $this->assertStringContainsString('Sender: sender@originphp.com', $result);
         $this->assertStringContainsString('Reply-To: replyTo@originphp.com', $result);
         $this->assertStringContainsString('Return-Path: returnPath@originphp.com', $result);
@@ -881,7 +922,7 @@ class EmailTest extends \PHPUnit\Framework\TestCase
         $result = $email->send()->message();
         $this->assertStringContainsString('Subject: Injection =?UTF-8?B?dGVzdApCY2M6IGFwb2xsb0Bib3hlcnMuaW8=?=', $result);
         $this->assertStringNotContainsString('apollo@boxers.io', $result);
-        
+
         $email = new MockEmail(['engine' => 'Test']);
         $email->to('james@originphp.com', "James\nBcc: apollo@boxers.io")
             ->from('mailer@originphp.com')
@@ -920,11 +961,12 @@ class EmailTest extends \PHPUnit\Framework\TestCase
      * Work with ENV vars
      *
      * @param string $key
-     * @return void
+     * @return mixed
      */
     protected function env(string $key)
     {
         $result = getenv($key);
+
         return $result ? $result : null;
     }
 }

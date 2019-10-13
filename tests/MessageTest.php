@@ -14,11 +14,6 @@
 
 namespace Origin\Test\Mailer;
 
-use \Exception;
-use Origin\Email\Email;
-use \InvalidArgumentException;
-use \BadMethodCallException;
-use Origin\Email\Exception\SmtpException;
 use Origin\Email\Message;
 
 class MessageTest extends \PHPUnit\Framework\TestCase

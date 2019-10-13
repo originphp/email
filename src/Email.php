@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 /**
  * OriginPHP Framework
@@ -16,12 +17,15 @@ declare(strict_types=1);
 namespace Origin\Email;
 
 use \Exception;
-use \InvalidArgumentException;
 use \BadMethodCallException;
+use \InvalidArgumentException;
 use Origin\Email\Exception\SmtpException;
+use Origin\Configurable\StaticConfigurable as Configurable;
 
 class Email
 {
+    use Configurable;
+
     const CRLF = "\r\n";
 
     protected $to = [];
@@ -70,7 +74,7 @@ class Email
      *
      * @var array
      */
-    protected $account = [];
+    protected $account = null;
 
     protected $socket = null;
     /**
@@ -105,7 +109,7 @@ class Email
     /**
      * Constructor
      *
-     * @param array $config The following options keys are supported :
+     * @param string|array $config name of account or an array with the following option keys
      *   - host: hostname e.g smtp.gmail.com
      *   - port: default 25
      *   - username
@@ -116,7 +120,7 @@ class Email
      *   - timeout: default 30 seconds
      *   - engine: Smtp. You can use test, then email is not sent
      */
-    public function __construct(array $config)
+    public function __construct($config = 'default')
     {
         if (extension_loaded('mbstring') === false) {
             throw new Exception('mbstring extension is not loaded');
@@ -124,7 +128,21 @@ class Email
 
         mb_internal_encoding($this->charset); // mb_list_encodings()
 
-        $config += [
+        if (is_string($config)) {
+            $config = static::config($config);
+        }
+
+        if ($config) {
+            $this->setAccount($config);
+        }
+    }
+
+    /**
+     *
+     */
+    private function setAccount(array $config): void
+    {
+        $defaults = [
             'host' => 'localhost',
             'port' => 25,
             'username' => null,
@@ -135,8 +153,30 @@ class Email
             'timeout' => 30,
             'engine' => 'Smtp'
         ];
-        $this->account = $config;
+        $this->account = array_merge($defaults, $config);
         $this->applyConfig();
+    }
+
+    /**
+     * Sets and gets the email account to be used by this email instance.
+     *
+     * @param string|array $config
+     * @return \Origin\Email\Email|array
+     */
+    public function account(string $config = null)
+    {
+        if ($config === null) {
+            return $this->account;
+        }
+        $account = $config;
+        $config = static::config($config);
+
+        if (! $config) {
+            throw new InvalidArgumentException(sprintf('The email account `%s` does not exist.', $account));
+        }
+        $this->setAccount($config);
+
+        return $this;
     }
 
     /**
@@ -448,6 +488,10 @@ class Email
             return $this->message;
         }
 
+        if ($this->account === null) {
+            throw new BadMethodCallException('No Email Account Configured.');
+        }
+
         $this->smtpSend();
 
         return $this->message;
@@ -458,7 +502,7 @@ class Email
      *
      * @return \Origin\Email\Message
      */
-    protected function render() : Message
+    protected function render(): Message
     {
         $headers = '';
         foreach ($this->buildHeaders() as $header => $value) {
@@ -627,7 +671,7 @@ class Email
     protected function openSocket(array $account, array $options = []): void
     {
         $protocol = $account['ssl'] ? 'ssl' : 'tcp';
-    
+
         $server = $protocol . '://' . $account['host'] . ':' . $account['port'];
         $this->socketLog('Connecting to ' . $server);
 
@@ -888,7 +932,7 @@ class Email
      *
      * @return string
      */
-    private function uuid() : string
+    private function uuid(): string
     {
         return implode('-', [
             bin2hex(random_bytes(4)),

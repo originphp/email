@@ -16,10 +16,10 @@ $ composer require originphp/email
 
 ## Email Configuration
 
-When you create an instance of the Email object you will need to pass a configuration array.
+In your bootstrap or application config. If create a default account, then you do not need to specify an account when sending.
 
 ```php
-$config = [
+Email::config('default,[
     'host' => 'smtp.example.com',
     'port' => 25,
     'username' => 'demo@example.com',
@@ -27,7 +27,7 @@ $config = [
     'timeout' => 5,
     'ssl' => true,
     'tls' => false
-]
+]);
 ```
 
 The keys for the config are as follows:
@@ -42,6 +42,23 @@ The keys for the config are as follows:
 - *domain*: When we send the HELO command to the sever we have to identify your hostname, so we will use localhost or HTTP_SERVER var if client is not set.
 
 You can also pass keys such as `from`,`to`,`cc`,`bcc`,`sender` and `replyTo` this pass the data to its functions either as string if its just an email or an array if you want to include a name. Remember if you are going to automatically cc or bcc somewhere, then you have to next call addBcc or addCc to ensure that you don't overwrite this.
+
+
+Or when when you create an instance of the Email object you can pass an array
+
+```php
+$config = [
+    'host' => 'smtp.example.com',
+    'port' => 25,
+    'username' => 'demo@example.com',
+    'password' => 'secret',
+    'timeout' => 5,
+    'ssl' => true,
+    'tls' => false
+]
+$email = new Email($config);
+```
+
 
 For example
 
@@ -65,7 +82,7 @@ To send an email
 
 ```php
 use Origin\Email\Email;
-$Email = new Email();
+$Email = new Email($config);
 $Email->to('somebody@originphp.com')
     ->from('me@originphp.com')
     ->subject('This is a test')
@@ -117,6 +134,25 @@ $Email->to('somebody@originphp.com')
     ->textMessage('This is the text content')
     ->addAttachment($filename1)
     ->addAttachment($filename2,'Logo.png')
-    ->format('text')
+    ->send();
+```
+
+## Using Multiple Accounts
+
+```php
+use Origin\Email\Email;
+$Email = new Email('gmail');
+```
+
+Or 
+
+```php
+use Origin\Email\Email;
+$Email = new Email();
+$Email->to('somebody@originphp.com')
+    ->from('me@originphp.com')
+    ->subject('This is a test')
+    ->textMessage('This is the text content')
+    ->account('gmail')
     ->send();
 ```
