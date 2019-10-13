@@ -484,12 +484,12 @@ class Email
 
         $this->message = $this->render();
 
-        if ($this->account['engine'] === 'Test' or $debug === true) {
-            return $this->message;
+        if ($this->account === null and $debug === false) {
+            throw new BadMethodCallException('No Email Account Configured.');
         }
 
-        if ($this->account === null) {
-            throw new BadMethodCallException('No Email Account Configured.');
+        if ($debug === true or $this->account['engine'] === 'Test') {
+            return $this->message;
         }
 
         $this->smtpSend();
