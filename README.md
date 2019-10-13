@@ -139,6 +139,8 @@ $Email->to('somebody@originphp.com')
 
 ## Using Multiple Accounts
 
+If you have configured using `Email::config('gmail',$config)` then you can use it like this
+
 ```php
 use Origin\Email\Email;
 $Email = new Email('gmail');
