@@ -16,10 +16,10 @@ $ composer require originphp/email
 
 ## Email Configuration
 
-In your bootstrap or application config. If create a default account, then you do not need to specify an account when sending.
+In your bootstrap or application config. If you create a default account, then you do not need to specify an account or configure the instance of the email.
 
 ```php
-Email::config('default,[
+Email::config('default',[
     'host' => 'smtp.example.com',
     'port' => 25,
     'username' => 'demo@example.com',
@@ -41,10 +41,9 @@ The keys for the config are as follows:
 - *timeout*: how many seconds to timeout
 - *domain*: When we send the HELO command to the sever we have to identify your hostname, so we will use localhost or HTTP_SERVER var if client is not set.
 
-You can also pass keys such as `from`,`to`,`cc`,`bcc`,`sender` and `replyTo` this pass the data to its functions either as string if its just an email or an array if you want to include a name. Remember if you are going to automatically cc or bcc somewhere, then you have to next call addBcc or addCc to ensure that you don't overwrite this.
 
 
-Or when when you create an instance of the Email object you can pass an array
+You can also pass an array with configuration when you create an instance of the Email object.
 
 ```php
 $config = [
@@ -59,6 +58,7 @@ $config = [
 $email = new Email($config);
 ```
 
+You can also pass keys such as `from`,`to`,`cc`,`bcc`,`sender` and `replyTo` this pass the data to its functions either as string if its just an email or an array if you want to include a name. Remember if you are going to automatically cc or bcc somewhere, then you have to next call addBcc or addCc to ensure that you don't overwrite this.
 
 For example
 
