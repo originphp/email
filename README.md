@@ -21,7 +21,7 @@ In your bootstrap or application config. If you create a default account, then y
 ```php
 Email::config('default',[
     'host' => 'smtp.example.com',
-    'port' => 25,
+    'port' => 465,
     'username' => 'demo@example.com',
     'password' => 'secret',
     'timeout' => 5,
