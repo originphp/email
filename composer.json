@@ -30,7 +30,7 @@
         "php": "^7.2.0",
         "ext-mbstring": "*",
         "originphp/defer": "^1.0",
-        "originphp/configurable": "^0.1.0"
+        "originphp/configurable": "^1.0.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^8.0"
