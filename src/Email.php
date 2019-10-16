@@ -459,9 +459,9 @@ class Email
     }
 
     /**
-     * Undocumented function
+     * Sends the email
      *
-     * @param string $message Text message if sending directly like this
+     * @param bool $debug set to true to not send via SMTP
      * @return \Origin\Email\Message
      */
     public function send(bool $debug = false): Message
