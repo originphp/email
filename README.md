@@ -173,7 +173,13 @@ you can use a token.
 ]);
 ```
 
-### Gsuite/Gmail Oauth Token Generation
+### Generating Tokens (Generic)
+
+To generate Oauth2 tokens, you can use the [thephpleague/oauth2-client](https://github.com/thephpleague/oauth2-client) package.
+
+### Generating Token for Gsuite/Gmail using the Command Line
+
+The Google Client Library API allows you to generate tokens from the command line (without having to redirect to a script), and I have included a quick script for this.
 
 To obtain an Oauth2 token that you can use with your Gsuite/Gmail account follow these instructions.
 
