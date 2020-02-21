@@ -67,7 +67,7 @@ class Oauth2Test extends \PHPUnit\Framework\TestCase
         $email = new Email();
         $email->to('info@originphp.com')
             ->subject('PHPUnit Test: ' . date('Y-m-d H:i:s') . ' [GSUITE]')
-            ->from($this->env('GSUITE_USERNAME'), 'PHP Unit')
+            ->from('info@originphp.com', 'PHP Unit')
             ->format('html')
             ->account('test-office365')
             ->htmlMessage('<p>This is an email test to ensure that the framework can send emails properly with TLS and can include this in code coverage.<p>');
