@@ -32,16 +32,14 @@ Email::config('default',[
 
 The keys for the config are as follows:
 
-- *host*: this is smtp server hostname
-- *port*: port number default 25
-- *username*: the username to access this SMTP server
-- *password*: the password to access this SMTP server
-- *ssl*: default is false, set to true if you want to connect via SSL
-- *tls*: default is false, set to true if you want to enable TLS
-- *timeout*: how many seconds to timeout
-- *domain*: When we send the HELO command to the sever we have to identify your hostname, so we will use localhost or HTTP_SERVER var if client is not set.
-
-
+- _host_: this is smtp server hostname
+- _port_: port number default 25
+- _username_: the username to access this SMTP server
+- _password_: the password to access this SMTP server
+- _ssl_: default is false, set to true if you want to connect via SSL
+- _tls_: default is false, set to true if you want to enable TLS
+- _timeout_: how many seconds to timeout
+- _domain_: When we send the HELO command to the sever we have to identify your hostname, so we will use localhost or HTTP_SERVER var if client is not set.
 
 You can also pass an array with configuration when you create an instance of the Email object.
 
@@ -72,7 +70,7 @@ For example
 
 ## Sending Emails
 
-The default email sending behavior is to send a text version. However it best practice to send both HTML and text and this reduces the risk of your email ending up in spam folders. 
+The default email sending behavior is to send a text version. However it best practice to send both HTML and text and this reduces the risk of your email ending up in spam folders.
 
 When an email is sent it will return a Message object, if an error is encountered when sending then the email class will throw an exception which you can catch in try/catch block.
 
@@ -146,7 +144,7 @@ use Origin\Email\Email;
 $Email = new Email('gmail');
 ```
 
-Or 
+Or
 
 ```php
 use Origin\Email\Email;
@@ -158,3 +156,46 @@ $Email->to('somebody@originphp.com')
     ->account('gmail')
     ->send();
 ```
+
+## Oauth2
+
+To configure your email account to use Oauth2 authentication, instead of providing a password
+use the token.
+
+```php
+ Email::config('gsuite', [
+    'host' => 'smtp.gmail.com',
+    'port' => 587,
+    'username' => 'somebody@gmail.com',
+    'token' => 'b1816172fd2ba98f3af520ef572e3a47', // see token generation below
+    'ssl' => false,
+    'tls' => true
+]);
+```
+
+### Gsuite/Gmail Token Generation
+
+To obtain an Oauth2 token that you can use with your Gsuite/Gmail account follow these instructions.
+
+### Enable Gmail API
+
+Enable the Gsuite API for your email account by going to [https://developers.google.com/gmail/api/quickstart/php](https://developers.google.com/gmail/api/quickstart/php) and click on `Enable the Gmail API` button then click on the `Download Client Configuration` and save this file to `data/credentials.json` in the `vendor/originphp/email/` folder.
+
+### Install Google Client Library
+
+```linux
+$ composer require google/apiclient:^2.0
+```
+
+### Run the Script
+
+From the `vendor/originphp/email/` folder run the Google CLI script.
+
+```linux
+$ bin/google
+```
+
+Copy the URL into your browser and follow the instructions on screen, this will provide you with a code for you to copy and paste.
+
+Paste the code into your console window, and your token will be displayed on the screen. The token JSON will be saved to `data/token.json` for future reference.
+

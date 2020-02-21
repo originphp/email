@@ -543,15 +543,26 @@ class Email
     /**
      * Handles the STMP authentication
      *
+     * @see https://developers.google.com/google-apps/gmail/xoauth2_protocol#the_sasl_xoauth2_mechanism
+     * @see https://developers.google.com/gmail/imap/xoauth2-protocol
      * @param array $account
      * @return void
      */
-    protected function authenticate(array $account): void
+    protected function authenticate(array $account) : void
     {
         if (isset($account['username']) and isset($account['password'])) {
             $this->sendCommand('AUTH LOGIN', '334');
             $this->sendCommand(base64_encode($account['username']), '334');
             $this->sendCommand(base64_encode($account['password']), '235');
+        } elseif (isset($account['username']) and isset($account['token'])) {
+            $param = "user={$account['username']}\001auth=Bearer ". $account['token'] ."\001\001";
+            try {
+                $this->sendCommand('AUTH XOAUTH2 ' . base64_encode($param), '235');
+            } catch (SmtpException $ex) {
+                // @important Gsuite states to send empty response to get error. Using RSET, works with
+                // both office365 and gsuite.
+                $this->sendCommand('RSET');
+            }
         }
     }
 

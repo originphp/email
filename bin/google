@@ -1,0 +1,79 @@
+#!/usr/bin/env php
+<?php
+/**
+ * OriginPHP Framework
+ * Copyright 2018 - 2020 Jamiel Sharief.
+ *
+ * Licensed under The MIT License
+ * The above copyright notice and this permission notice shall be included in all copies or substantial
+ * portions of the Software.
+ *
+ * @copyright    Copyright (c) Jamiel Sharief
+ * @link         https://www.originphp.com
+ * @license      https://opensource.org/licenses/mit-license.php MIT License
+ */
+declare(strict_types=1);
+
+$path = dirname(__DIR__, 1);
+
+require $path . '/vendor/autoload.php';
+
+if (PHP_SAPI !== 'cli' and PHP_SAPI !== 'phpdbg') {
+    throw new Exception('This application must be run on the command line.');
+}
+
+// Install the Google API Client.
+// $ composer require google/apiclient:^2.0
+if (!class_exists(Google_Client::class)) {
+    throw new Exception('Package google/apiclient is not installed.');
+}
+
+// Check credentials
+// Enable the Gmail API by going to https://developers.google.com/gmail/api/quickstart/php
+$credentials = $path . '/data/credentials.json';
+if (!file_exists($credentials)) {
+    throw new Exception($credentials . ' not found');
+}
+
+$client = new Google_Client();
+$client->setApplicationName('OriginPHP Email');
+$client->setScopes(Google_Service_Gmail::MAIL_GOOGLE_COM);
+$client->setAuthConfig($credentials);
+$client->setAccessType('offline');
+$client->setPrompt('select_account consent');
+
+$token = $path . '/data/token.json';
+if (file_exists($token)) {
+    $accessToken = json_decode(file_get_contents($token), true);
+    $client->setAccessToken($accessToken);
+}
+
+ // If there is no previous token or it's expired.
+ if ($client->isAccessTokenExpired()) {
+     // Refresh the token if possible, else fetch a new one.
+     if ($client->getRefreshToken()) {
+         $client->fetchAccessTokenWithRefreshToken($client->getRefreshToken());
+     } else {
+         // Request authorization from the user.
+         $authUrl = $client->createAuthUrl();
+         printf("1. Open the following link in your browser:\n\n%s\n\n", $authUrl);
+         print "2. Enter verification code: ";
+         $authCode = trim(fgets(STDIN));
+
+         // Exchange authorization code for an access token.
+         $accessToken = $client->fetchAccessTokenWithAuthCode($authCode);
+         $client->setAccessToken($accessToken);
+
+         // Check to see if there was an error.
+         if (array_key_exists('error', $accessToken)) {
+             throw new Exception(join(', ', $accessToken));
+         }
+     }
+     // Save the token to a file.
+     if (!file_exists(dirname($token))) {
+         mkdir(dirname($token), 0700, true);
+     }
+     $accessToken = $client->getAccessToken();
+     print "\n3. Save your Token:\n\n{$accessToken['access_token']}\n";
+     file_put_contents($token, json_encode($token));
+ }
