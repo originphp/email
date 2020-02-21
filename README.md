@@ -173,11 +173,11 @@ you can use a token.
 ]);
 ```
 
-### Generating Tokens (Generic)
+### Generating Tokens (web-based)
 
-To generate Oauth2 tokens, you can use the [thephpleague/oauth2-client](https://github.com/thephpleague/oauth2-client) package.
+To generate Oauth2 tokens, you can use the [thephpleague/oauth2-client](https://github.com/thephpleague/oauth2-client) package. You can also use a specific provider API to do this.
 
-### Generating Token for Gsuite/Gmail using the Command Line
+### Generating Token (command-line)
 
 The Google Client Library API allows you to generate tokens from the command line (without having to redirect to a script), and I have included a quick script for this.
 
