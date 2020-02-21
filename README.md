@@ -160,7 +160,7 @@ $Email->to('somebody@originphp.com')
 ## Oauth2
 
 To configure your email account to use Oauth2 authentication, instead of providing a password
-use the token.
+you can use a token.
 
 ```php
  Email::config('gsuite', [
@@ -173,21 +173,21 @@ use the token.
 ]);
 ```
 
-### Gsuite/Gmail Token Generation
+### Gsuite/Gmail Oauth Token Generation
 
 To obtain an Oauth2 token that you can use with your Gsuite/Gmail account follow these instructions.
 
-### Enable Gmail API
+#### Enable Gmail API
 
 Enable the Gsuite API for your email account by going to [https://developers.google.com/gmail/api/quickstart/php](https://developers.google.com/gmail/api/quickstart/php) and click on `Enable the Gmail API` button then click on the `Download Client Configuration` and save this file to `data/credentials.json` in the `vendor/originphp/email/` folder.
 
-### Install Google Client Library
+#### Install Google Client Library
 
 ```linux
 $ composer require google/apiclient:^2.0
 ```
 
-### Run the Script
+#### Run the Script
 
 From the `vendor/originphp/email/` folder run the Google CLI script.
 
