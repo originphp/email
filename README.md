@@ -199,3 +199,8 @@ Copy the URL into your browser and follow the instructions on screen, this will 
 
 Paste the code into your console window, and your token will be displayed on the screen. The token JSON will be saved to `data/token.json` for future reference.
 
+The token looks something like this
+
+`ab12.a0Adw1xeXU_VNW97dzxLO1Kh7kWQ9z39PZoNcgGzTktZqYJ-GKgqVL3MzwkQnVbpg8Ui167qYYcQjhDpnQokbs0ZIcHnfyX4rn2xigz8h_It7qLcz8i015QE3OUoEpI8myav9zHzwPU5_44rab0DY_2FlXRQ1pU_u40cI`
+
+Simply add this to your email configuration.
