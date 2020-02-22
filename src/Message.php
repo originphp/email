@@ -16,9 +16,26 @@ namespace Origin\Email;
 
 class Message
 {
-    protected $header = null;
-    protected $body = null;
+    /**
+     * The message header
+     *
+     * @var string
+     */
+    private $header = null;
 
+    /**
+     * The message body
+     *
+     * @var string
+     */
+    private $body = null;
+
+    /**
+     * Constructor
+     *
+     * @param string $header
+     * @param string $body
+     */
     public function __construct(string $header, string $body)
     {
         $this->header = $header;
@@ -55,6 +72,11 @@ class Message
         return $this->header . "\r\n\r\n" . $this->body;
     }
 
+    /**
+     * Magic method for converting this object to a string
+     *
+     * @return string
+     */
     public function __toString()
     {
         return $this->message();
