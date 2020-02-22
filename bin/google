@@ -75,5 +75,5 @@ if (file_exists($token)) {
      }
      $accessToken = $client->getAccessToken();
      print "\n3. Save your Token:\n\n{$accessToken['access_token']}\n";
-     file_put_contents($token, json_encode($token));
+     file_put_contents($token, json_encode($accessToken));
  }
