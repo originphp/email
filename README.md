@@ -173,40 +173,29 @@ you can use a token.
 ]);
 ```
 
-### Generating Tokens (web-based)
+### Generating Tokens
 
-To generate Oauth2 tokens, you can use the [thephpleague/oauth2-client](https://github.com/thephpleague/oauth2-client) package. You can also use a specific provider API to do this.
+To generate Oauth2 tokens, you can use the [thephpleague/oauth2-client](https://github.com/thephpleague/oauth2-client) package or if you are using Google (Gsuite/Gmail) then you can use the command line script provided.
 
-### Generating Token (command-line)
-
+#### Google Command-Line OAuth Token Generator
 The Google Client Library API allows you to generate tokens from the command line (without having to redirect to a script), and I have included a quick script for this.
 
 To obtain an Oauth2 token that you can use with your Gsuite/Gmail account follow these instructions.
 
-#### Enable Gmail API
+1. Enable the Gsuite API for your email account by going to [https://developers.google.com/gmail/api/quickstart/php](https://developers.google.com/gmail/api/quickstart/php) and then click on `Enable the Gmail API` button, then the `Download Client Configuration` button. Once you have done this, save the data file to `data/credentials.json` in the `vendor/originphp/email/` folder.
 
-Enable the Gsuite API for your email account by going to [https://developers.google.com/gmail/api/quickstart/php](https://developers.google.com/gmail/api/quickstart/php) and click on `Enable the Gmail API` button then click on the `Download Client Configuration` and save this file to `data/credentials.json` in the `vendor/originphp/email/` folder.
-
-#### Install Google Client Library
+2. Install Google Client Library (PHP), by running the following command:
 
 ```linux
 $ composer require google/apiclient:^2.0
 ```
 
-#### Run the Script
-
-From the `vendor/originphp/email/` folder run the Google CLI script.
+3. From the `vendor/originphp/email/` folder run the Google CLI script.
 
 ```linux
 $ bin/google
 ```
 
-Copy the URL into your browser and follow the instructions on screen, this will provide you with a code for you to copy and paste.
+Now copy the URL into your browser and follow the instructions on screen, and this will provide you with a code. Paste the code into your console window, and your token will be displayed on the screen. The token JSON will be saved to `data/token.json` for future reference.
 
-Paste the code into your console window, and your token will be displayed on the screen. The token JSON will be saved to `data/token.json` for future reference.
-
-The token looks something like this
-
-`ab12.a0Adw1xeXU_VNW97dzxLO1Kh7kWQ9z39PZoNcgGzTktZqYJ-GKgqVL3MzwkQnVbpg8Ui167qYYcQjhDpnQokbs0ZIcHnfyX4rn2xigz8h_It7qLcz8i015QE3OUoEpI8myav9zHzwPU5_44rab0DY_2FlXRQ1pU_u40cI`
-
-Simply add this to your email configuration.
+4. Add the token that was generated to your email configuration.
