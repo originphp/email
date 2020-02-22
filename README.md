@@ -175,9 +175,10 @@ you can use a token.
 
 ### Generating Tokens
 
-To generate Oauth2 tokens, you can use the [thephpleague/oauth2-client](https://github.com/thephpleague/oauth2-client) package or if you are using Google (Gsuite/Gmail) then you can use the command line script provided.
+To generate Oauth2 tokens, you can use the [thephpleague/oauth2-client](https://github.com/thephpleague/oauth2-client) package or if you are using Google (Gsuite/Gmail) then you can use the command line script provided. The script provided is only ideal for sending emails from your own account, rather than from a user account.
 
 #### Google Command-Line OAuth Token Generator
+
 The Google Client Library API allows you to generate tokens from the command line (without having to redirect to a script), and I have included a quick script for this.
 
 To obtain an Oauth2 token that you can use with your Gsuite/Gmail account follow these instructions.
