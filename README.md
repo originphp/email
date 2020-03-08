@@ -80,7 +80,7 @@ To send an email
 
 ```php
 use Origin\Email\Email;
-$Email = new Email($config);
+$Email = new Email();
 $Email->to('somebody@originphp.com')
     ->from('me@originphp.com')
     ->subject('This is a test')
@@ -94,7 +94,7 @@ To send an email with both HTML and text versions:
 
 ```php
 use Origin\Email\Email;
-$Email = new Email($config);
+$Email = new Email();
 $Email->to('somebody@originphp.com')
     ->from('me@originphp.com')
     ->subject('This is a test')
@@ -110,7 +110,7 @@ To send a HTML only email, you need to tell the Email utility use the HTML forma
 
 ```php
 use Origin\Email\Email;
-$Email = new Email($config));
+$Email = new Email());
 $Email->to('somebody@originphp.com')
     ->from('me@originphp.com')
     ->subject('This is a test')
@@ -125,7 +125,7 @@ To add attachments to an email message
 
 ```php
 use Origin\Email\Email;
-$Email = new Email($config);
+$Email = new Email();
 $Email->to('somebody@originphp.com')
     ->from('me@originphp.com')
     ->subject('This is a test')
