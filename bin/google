@@ -16,7 +16,7 @@ declare(strict_types=1);
 
 $path = dirname(__DIR__, 1);
 
-require $path . '/vendor/autoload.php';
+require 'vendor/autoload.php';
 
 if (PHP_SAPI !== 'cli' and PHP_SAPI !== 'phpdbg') {
     throw new Exception('This application must be run on the command line.');

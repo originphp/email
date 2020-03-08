@@ -191,10 +191,10 @@ To obtain an Oauth2 token that you can use with your Gsuite/Gmail account follow
 $ composer require google/apiclient:^2.0
 ```
 
-3. From the `vendor/originphp/email/` folder run the Google CLI script.
+3. Run the Google CLI script.
 
 ```linux
-$ bin/google
+$ vendor/bin/google
 ```
 
 Now copy the URL into your browser and follow the instructions on screen, and this will provide you with a code. Paste the code into your console window, and your token will be displayed on the screen. The token JSON will be saved to `data/token.json` for future reference.

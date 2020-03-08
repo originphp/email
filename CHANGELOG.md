@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Fixed Google console script autoload path when run from vendor dir
 - Fixed saving of oauth2 token to file
 
 ### Added
