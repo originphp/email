@@ -28,6 +28,8 @@
         <env name="EMAIL_PORT" value="465"/>
         <env name="EMAIL_SSL" value="1"/>
         <env name="EMAIL_TLS" value="0"/>
+        <env name="GSUITE_USERNAME" value="your-account@gmail.com""/>
+        <env name="GSUITE_TOKEN" value="xxxx"/>
         -->
     </php>
 </phpunit>
