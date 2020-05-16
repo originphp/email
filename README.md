@@ -183,7 +183,7 @@ The Google Client Library API allows you to generate tokens from the command lin
 
 To obtain an Oauth2 token that you can use with your Gsuite/Gmail account follow these instructions.
 
-1. Enable the Gsuite API for your email account by going to [https://developers.google.com/gmail/api/quickstart/php](https://developers.google.com/gmail/api/quickstart/php) and then click on `Enable the Gmail API` button, then the `Download Client Configuration` button. Once you have done this, save the data file to `data/credentials.json` in the `vendor/originphp/email/` folder.
+1. Enable the Gsuite API for your email account by going to [https://developers.google.com/gmail/api/quickstart/php](https://developers.google.com/gmail/api/quickstart/php) and then click on `Enable the Gmail API` button, click on `Desktop App` then the `Download Client Configuration` button. Once you have done this, save the data file to `data/credentials.json` in the `vendor/originphp/email/` folder.
 
 2. Install Google Client Library (PHP), by running the following command:
 
