@@ -56,8 +56,8 @@ if (file_exists($token)) {
      } else {
          // Request authorization from the user.
          $authUrl = $client->createAuthUrl();
-         printf("1. Open the following link in your browser:\n\n%s\n\n", $authUrl);
-         print "2. Enter verification code: ";
+         printf("Open the following link in your browser:\n\n%s\n\n", $authUrl);
+         print "Enter verification code: ";
          $authCode = trim(fgets(STDIN));
 
          // Exchange authorization code for an access token.
@@ -74,6 +74,6 @@ if (file_exists($token)) {
          mkdir(dirname($token), 0700, true);
      }
      $accessToken = $client->getAccessToken();
-     print "\n3. Save your Token:\n\n{$accessToken['access_token']}\n";
+     print "\nSave your Token:\n\n{$accessToken['access_token']}\n";
      file_put_contents($token, json_encode($accessToken));
  }
