@@ -472,21 +472,21 @@ class Email
             throw new BadMethodCallException('To email is not set.');
         }
 
-        if (($this->format() === 'html' or $this->format() === 'both') and empty($this->htmlMessage)) {
+        if (($this->format() === 'html' || $this->format() === 'both') && empty($this->htmlMessage)) {
             throw new BadMethodCallException('Html Message not set.');
         }
 
-        if (($this->format() === 'text' or $this->format() === 'both') and empty($this->textMessage)) {
+        if (($this->format() === 'text' || $this->format() === 'both') && empty($this->textMessage)) {
             throw new BadMethodCallException('Text Message not set.');
         }
 
         $this->message = $this->render();
 
-        if ($this->account === null and $debug === false) {
+        if ($this->account === null && $debug === false) {
             throw new BadMethodCallException('No Email Account Configured.');
         }
 
-        if ($debug === true or $this->account['engine'] === 'Test') {
+        if ($debug === true || $this->account['engine'] === 'Test') {
             return $this->message;
         }
 
@@ -550,11 +550,11 @@ class Email
      */
     protected function authenticate(array $account) : void
     {
-        if (isset($account['username']) and isset($account['password'])) {
+        if (isset($account['username']) && isset($account['password'])) {
             $this->sendCommand('AUTH LOGIN', '334');
             $this->sendCommand(base64_encode($account['username']), '334');
             $this->sendCommand(base64_encode($account['password']), '235');
-        } elseif (isset($account['username']) and isset($account['token'])) {
+        } elseif (isset($account['username']) && isset($account['token'])) {
             $param = "user={$account['username']}\001auth=Bearer ". $account['token'] ."\001\001";
             try {
                 $this->sendCommand('AUTH XOAUTH2 ' . base64_encode($param), '235');
@@ -625,7 +625,7 @@ class Email
         }
         $response = '';
         $startTime = time();
-        while (is_resource($this->socket) and ! feof($this->socket)) {
+        while (is_resource($this->socket) && ! feof($this->socket)) {
             $buffer = @fgets($this->socket, 515);
             if (! $buffer) {
                 break; // no more data or an error has occured
@@ -640,12 +640,12 @@ class Email
              * according to standard)
              */
 
-            if (substr($buffer, 3, 1) == ' ' or strlen($buffer) === 3) {
+            if (substr($buffer, 3, 1) === ' ' || strlen($buffer) === 3) {
                 break;
             }
 
             $info = stream_get_meta_data($this->socket);
-            if ($info['timed_out'] or (time() - $startTime) >= $this->account['timeout']) {
+            if ($info['timed_out'] || (time() - $startTime) >= $this->account['timeout']) {
                 throw new SmtpException('SMTP timeout.');
             }
         }
@@ -818,7 +818,7 @@ class Email
         }
 
         $headers['Content-Type'] = $this->getContentType();
-        if ($this->needsEncoding() and empty($this->attachments) and $this->format() !== 'both') {
+        if ($this->needsEncoding() && empty($this->attachments) && $this->format() !== 'both') {
             $headers['Content-Transfer-Encoding'] = 'quoted-printable';
         }
 
@@ -838,12 +838,12 @@ class Email
         $needsEncoding = $this->needsEncoding();
         $altBoundary = $boundary = $this->getBoundary();
 
-        if ($this->attachments and ($emailFormat === 'html' or $emailFormat === 'text')) {
+        if ($this->attachments && ($emailFormat === 'html' || $emailFormat === 'text')) {
             $message[] = '--' . $boundary;
-            if ($emailFormat == 'text') {
+            if ($emailFormat === 'text') {
                 $message[] = 'Content-Type: text/plain; charset="' . $this->charset . '"';
             }
-            if ($emailFormat == 'html') {
+            if ($emailFormat === 'html') {
                 $message[] = 'Content-Type: text/html; charset="' . $this->charset . '"';
             }
 
@@ -853,15 +853,15 @@ class Email
             $message[] = '';
         }
 
-        if ($this->attachments and $emailFormat == 'both') {
+        if ($this->attachments && $emailFormat === 'both') {
             $altBoundary = 'alt-' . $boundary;
             $message[] = '--' . $boundary;
             $message[] = 'Content-Type: multipart/alternative; boundary="' . $altBoundary . '"';
             $message[] = '';
         }
 
-        if (($emailFormat === 'text' or $emailFormat === 'both') and $this->textMessage) {
-            if ($emailFormat == 'both') {
+        if (($emailFormat === 'text' || $emailFormat === 'both') && $this->textMessage) {
+            if ($emailFormat === 'both') {
                 $message[] = '--' . $altBoundary;
                 $message[] = 'Content-Type: text/plain; charset="' . $this->charset . '"';
                 if ($needsEncoding) {
@@ -873,8 +873,8 @@ class Email
             $message[] = '';
         }
 
-        if (($emailFormat === 'html' or $emailFormat === 'both') and $this->htmlMessage) {
-            if ($emailFormat == 'both') {
+        if (($emailFormat === 'html' || $emailFormat === 'both') && $this->htmlMessage) {
+            if ($emailFormat === 'both') {
                 $message[] = '--' . $altBoundary;
                 $message[] = 'Content-Type: text/html; charset="' . $this->charset . '"';
                 if ($needsEncoding) {
@@ -898,7 +898,7 @@ class Email
                 $message[] = '';
             }
         }
-        if ($emailFormat == 'both' or $this->attachments) {
+        if ($emailFormat === 'both' || $this->attachments) {
             $message[] = '--' . $boundary . '--';
         }
 
@@ -1044,10 +1044,10 @@ class Email
     {
         $emailFormat = $this->format();
 
-        if (($emailFormat == 'text' or $emailFormat == 'both') and mb_check_encoding($this->textMessage, 'ASCII') === false) {
+        if (($emailFormat === 'text' || $emailFormat === 'both') and mb_check_encoding($this->textMessage, 'ASCII') === false) {
             return true;
         }
-        if (($emailFormat == 'html' or $emailFormat == 'both') and mb_check_encoding($this->htmlMessage, 'ASCII') === false) {
+        if (($emailFormat === 'html' || $emailFormat === 'both') and mb_check_encoding($this->htmlMessage, 'ASCII') === false) {
             return true;
         }
 
