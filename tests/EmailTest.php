@@ -342,7 +342,7 @@ class EmailTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals('1.0', $headers['MIME-Version']);
         $this->assertEquals(date('r'), $headers['Date']);
-        $validUUID = (bool) preg_match('/^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}@originphp.com$/i', $headers['Message-ID']);
+        $validUUID = (bool) preg_match('/^<[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}@originphp.com>$/i', $headers['Message-ID']);
         $this->assertTrue($validUUID);
         $this->assertEquals('test #1', $headers['Subject']);
         $this->assertEquals('mailer@originphp.com', $headers['From']);
