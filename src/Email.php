@@ -939,7 +939,10 @@ class Email
             $this->messageId = $this->uuid();
         }
 
-        return $this->messageId . '@' . $this->getDomain();
+        /**
+         * @link https://tools.ietf.org/html/rfc2822
+         */
+        return '<' . $this->messageId . '@' . $this->getDomain() . '>';
     }
 
     /**
