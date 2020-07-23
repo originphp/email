@@ -188,7 +188,13 @@ class Email
     {
         foreach (['to', 'from', 'sender', 'replyTo'] as $method) {
             if (isset($this->account[$method])) {
-                call_user_func_array([$this, $method], (array) $this->account[$method]);
+                foreach ((array) $this->account[$method] as $email => $name) {
+                    if (is_int($email)) {
+                        $email = $name;
+                        $name = null;
+                    }
+                    call_user_func_array([$this, $method], [$email,$name]);
+                }
             }
         }
         if (isset($this->account['bcc'])) {

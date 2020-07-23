@@ -618,6 +618,11 @@ class EmailTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(['cc@example.com', null], $email->getProperty('cc')[0]);
         $this->assertEquals(['sender@example.com', null], $email->getProperty('sender'));
         $this->assertEquals(['replyTo@example.com', null], $email->getProperty('replyTo'));
+
+        $config['from'] = ['from@example.com' => 'Foo'];
+
+        $email = new MockEmail($config);
+        $this->assertEquals(['from@example.com', 'Foo'], $email->getProperty('from'));
     }
 
     public function testSendNoHtmlMessageException()
