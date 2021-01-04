@@ -759,8 +759,9 @@ class EmailTest extends \PHPUnit\Framework\TestCase
             ->htmlMessage('<p>This is an email test to ensure that the framework can send emails properly and can include this in code coverage.<p>')
             ->textMessage('This is an email test to ensure that the framework can send emails properly and can include this in code coverage.');
 
-        print_r($email->smtpLog());
+       
         $result = $email->send();
+        print_r($email->smtpLog());
         $this->assertNotEmpty($result);
         sleep(1); // small delay before next email is sent
         return implode("'\n", $email->smtpLog());
