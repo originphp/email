@@ -1,35 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit
-    colors="true"
-    processIsolation="false"
-    stopOnFailure="false"
-    bootstrap="vendor/autoload.php"
-    backupGlobals="true"
-    >
-    <testsuites>
-        <testsuite name="Origin Email">
-            <directory>./tests/</directory>
-        </testsuite>
-    </testsuites>
-    <filter>
-        <whitelist>
-            <directory suffix=".php">./src/</directory>
-        </whitelist>
-    </filter>
-    <php>
-       <const name="PHPUNIT" value="true"/>
-       <env name="ORIGIN_ENV" value="test"/>
-
-        <!-- Set email account configuration here
-        <env name="EMAIL_ADDRESS" value="your-account@gmail.com"/>
-        <env name="EMAIL_HOST" value="smtp.gmail.com"/>
-        <env name="EMAIL_USERNAME" value="your-account@gmail.com"/>
-        <env name="EMAIL_PASSWORD" value="secret"/>
-        <env name="EMAIL_PORT" value="465"/>
-        <env name="EMAIL_SSL" value="1"/>
-        <env name="EMAIL_TLS" value="0"/>
-        <env name="GSUITE_USERNAME" value="your-account@gmail.com""/>
-        <env name="GSUITE_TOKEN" value="xxxx"/>
-        -->
-    </php>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" colors="true" processIsolation="false" stopOnFailure="false" bootstrap="vendor/autoload.php" backupGlobals="true" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
+  <coverage>
+    <include>
+      <directory suffix=".php">./src/</directory>
+    </include>
+  </coverage>
+  <testsuites>
+    <testsuite name="OriginPHP Email">
+      <directory>./tests/</directory>
+    </testsuite>
+  </testsuites>
+  <php>
+    <const name="PHPUNIT" value="true"/>
+    <env name="ORIGIN_ENV" value="test"/>
+    <env name="EMAIL_ADDRESS" value="user@example.com"/>
+    <env name="EMAIL_HOST" value="smtp.example.com"/>
+    <env name="EMAIL_USERNAME" value="user@example.com"/>
+    <env name="EMAIL_PASSWORD" value="secret"/>
+    <env name="EMAIL_PORT" value="465"/>
+    <env name="EMAIL_SSL" value="1"/>
+    <env name="EMAIL_TLS" value="0"/>
+    <env name="GSUITE_USERNAME" value="user@gmail.com"/>
+    <env name="GSUITE_TOKEN" value="123g456789abcdef"/>
+  </php>
 </phpunit>
