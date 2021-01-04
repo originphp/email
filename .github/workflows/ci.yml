@@ -38,6 +38,14 @@ jobs:
           composer update --no-progress --prefer-dist
       - name: Run PHPUnit
         run: "php vendor/bin/phpunit --coverage-clover=clover.xml"
+        env: 
+          EMAIL_ADDRESS: ${{ secrets.EMAIL_ADDRESS }}
+          EMAIL_HOST: ${{ secrets.EMAIL_HOST }}
+          EMAIL_USERNAME: ${{ secrets.EMAIL_USERNAME }}
+          EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+          EMAIL_PORT: ${{ secrets.EMAIL_PORT }}
+          EMAIL_SSL: ${{ secrets.EMAIL_SSL }}
+          EMAIL_TLS: ${{ secrets.EMAIL_TLS }}
       - name: Coveralls
         env:
           COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -24,7 +24,7 @@ class Oauth2Test extends \PHPUnit\Framework\TestCase
 {
     public function testGmail()
     {
-        if (! $this->env('GSUITE_TOKEN') or ! $this->env('GSUITE_USERNAME')) {
+        if (! $this->env('GSUITE_TOKEN') || ! $this->env('GSUITE_USERNAME')) {
             $this->markTestSkipped('No credentials');
         }
         Email::config('test-gmail', [

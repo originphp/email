@@ -761,7 +761,7 @@ class EmailTest extends \PHPUnit\Framework\TestCase
 
        
         $result = $email->send();
-        print_r($email->smtpLog());
+       
         $this->assertNotEmpty($result);
         sleep(1); // small delay before next email is sent
         return implode("'\n", $email->smtpLog());
