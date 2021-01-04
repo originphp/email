@@ -35,6 +35,10 @@
     "bin": ["bin/google"],
     "require-dev": {
         "phpunit/phpunit": "^9.2",
-        "phpstan/phpstan": "^0.12.64"
+        "phpstan/phpstan": "^0.12.64",
+        "google/apiclient": "^2.8"
+    },
+    "suggest": {
+        "google/apiclient": "Allows you to send email using GMAIL"
     }
 }
