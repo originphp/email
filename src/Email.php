@@ -19,6 +19,7 @@ use \BadMethodCallException;
 use \InvalidArgumentException;
 use Origin\Email\Exception\SmtpException;
 use Origin\Configurable\StaticConfigurable as Configurable;
+use function Origin\Defer\defer;
 
 class Email
 {
